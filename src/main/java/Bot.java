@@ -18,7 +18,7 @@ public class Bot extends ListenerAdapter {
 
     public static void main(String[] args) throws LoginException {
 
-        JDA jda = JDABuilder.createDefault(/*token*/"OTQ1MTY0MzAxOTk0NDQ2ODQ5.GyZdn_.OylElJdRaLnA2egvk10ewoKtKCD_DWJ8nS_Nko")
+        JDA jda = JDABuilder.createDefault(/*token*/"OTQ1MTY0MzAxOTk0NDQ2ODQ5.GMIlEU.I9KKFG7vZCoOU5cHFJ6AUiIRKcBijfJmTxVkpw")
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
                 .addEventListeners(new Bot())
                 .setActivity(Activity.competing("creation competition concerning" +
@@ -45,6 +45,8 @@ public class Bot extends ListenerAdapter {
                     "**OTHELLO**\n" +
                     "!O new - start a new game of othello\n" +
                     "!O play *row, col* - play piece (if legal) at specified row and column (0,0 - 7,7) \n" +
+                            "!O save game- save the game (the bot will send a message containing the save)\n" +
+                            "!O continue [save] - [save] is the game ID that the bot sent after using the save game command\n" +
                             "**FILLER**\n" +
                             "!Filler - for instructions")
                     .queue();
@@ -239,7 +241,7 @@ public class Bot extends ListenerAdapter {
             event.getChannel().sendMessage("" +filler + "\nWelcome to Filler, \nThe object of the game is to capture as many" +
                     "squares as possible \nyou capture an adjacent square by changing to that color " +
                     "\nthe captured square will join your blob change color with you \n!F [color] to change to a color \n!F new for a new game \n " +
-                    "player one starts at the top left & player two at the bottom right\nyou cannot change to the color you are already or the other player's color" +
+                    "player one starts at the bottom left & player two at the top right\nyou cannot change to the color you are already or the other player's color" +
                     "").queue();
         }
         else if (msg.getContentRaw().indexOf("!F ") == 0) {

@@ -3,7 +3,8 @@ public class Filler {
     private boolean turnOne;
     private int[][] board;
     public static void main(String[] args){
-
+        Filler filler = new Filler();
+        System.out.println(filler.print());
     }
     public Filler(){
         turnOne = true;
@@ -11,6 +12,19 @@ public class Filler {
         for(int i = 0; i < board.length; i++){
             for(int j = 0; j < board[0].length; j++){
                 board[i][j] = (int)(Math.random()*6);
+                if(i -1 > -1 && board[i-1][j] == board[i][j]){
+                    board[i][j] = (board[i][j] + 1)%6;
+                    if(j -1 > -1 && board[i][j-1] == board[i][j]){
+                        board[i][j] = (board[i][j] + 1)%6;
+                    }
+                }
+                if(j -1 > -1 && board[i][j-1] == board[i][j]){
+                    board[i][j] = (board[i][j] + 1)%6;
+                    if(i -1 > -1 && board[i-1][j] == board[i][j]){
+                        board[i][j] = (board[i][j] + 1)%6;
+                    }
+                }
+
             }
         }
     }
@@ -43,18 +57,28 @@ public class Filler {
         return boardString;
 
     }
+    public String print(){
+        String boardString = "";
+        for(int i = 0; i < board.length; i++){
+            for(int j = 0; j < board[0].length; j++){
+                boardString += board[i][j] + " ";
+            }
+            boardString += "\n";
+        }
+        return boardString;
+    }
     public boolean isTurnOne(){
         return turnOne;
     }
     public void play(int changeTo){
-        if(changeTo == board[0][0] || changeTo == board[board.length -1][board[0].length -1]){
+        if(changeTo == board[board.length-1][0] || changeTo == board[0][board[0].length -1]){
             return;
         }
         if(turnOne){
-            change(0, 0, changeTo, board[0][0]);
+            change(0, board.length-1, changeTo, board[board.length-1][0]);
         }
         else{
-            change(board[0].length -1,board.length- 1, changeTo, board[board.length -1][board[0].length -1]);
+            change(board[0].length -1,0, changeTo, board[0][board[0].length -1]);
         }
         turnOne = !turnOne;
 
