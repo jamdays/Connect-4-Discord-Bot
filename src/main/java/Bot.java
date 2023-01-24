@@ -238,7 +238,7 @@ public class Bot extends ListenerAdapter {
         //OTHELLO END
         //FILLER START
         if (msg.getContentRaw().equalsIgnoreCase("!Filler")) {
-            event.getChannel().sendMessage("" +filler + "\nWelcome to Filler, \nThe object of the game is to capture as many" +
+            event.getChannel().sendMessage("" +filler + "\nWelcome to Filler, \nThe object of the game is to capture as many " +
                     "squares as possible \nyou capture an adjacent square by changing to that color " +
                     "\nthe captured square will join your blob change color with you \n!F [color] to change to a color \n!F new for a new game \n " +
                     "player one starts at the bottom left & player two at the top right\nyou cannot change to the color you are already or the other player's color" +
