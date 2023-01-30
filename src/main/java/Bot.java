@@ -18,7 +18,7 @@ public class Bot extends ListenerAdapter {
 
     public static void main(String[] args) throws LoginException {
 
-        JDA jda = JDABuilder.createDefault(/*token*/"OTQ1MTY0MzAxOTk0NDQ2ODQ5.GMIlEU.I9KKFG7vZCoOU5cHFJ6AUiIRKcBijfJmTxVkpw")
+        JDA jda = JDABuilder.createDefault(/*token*/"abc123")
                 .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
                 .addEventListeners(new Bot())
                 .setActivity(Activity.competing("creation competition concerning" +
@@ -241,7 +241,8 @@ public class Bot extends ListenerAdapter {
             event.getChannel().sendMessage("" +filler + "\nWelcome to Filler, \nThe object of the game is to capture as many " +
                     "squares as possible \nyou capture an adjacent square by changing to that color " +
                     "\nthe captured square will join your blob change color with you \n!F [color] to change to a color \n!F new for a new game \n " +
-                    "player one starts at the bottom left & player two at the top right\nyou cannot change to the color you are already or the other player's color" +
+                    "player one starts at the bottom left & player two at the top right\nyou cannot change to the color you are already or the other player's color\n" +
+                    "!F custom {y,x}- makes a custom board with y rows and x columns, y limit is 54, x limit is 14, the formatting is very specific so don't include extra spaces or sus things" +
                     "").queue();
         }
         else if (msg.getContentRaw().indexOf("!F ") == 0) {
@@ -265,11 +266,40 @@ public class Bot extends ListenerAdapter {
             }
             else if (msg.getContentRaw().toLowerCase().contains("new")){
                 filler = new Filler();
-            }else{
+
+            } else if(msg.getContentRaw().toLowerCase().contains("custom") &&
+                    msg.getContentRaw().contains("{") &&
+                    msg.getContentRaw().contains("}") && msg.getContentRaw().indexOf("{") < msg.getContentRaw().indexOf("}") &&
+                    msg.getContentRaw().indexOf(",") > msg.getContentRaw().indexOf("{") && msg.getContentRaw().indexOf(",") < msg.getContentRaw().indexOf("}")){
+                int x = 0;
+                int y = 0;
+                try{
+                     x = Integer.parseInt(msg.getContentRaw().substring(msg.getContentRaw().indexOf("{") + 1, msg.getContentRaw().indexOf(",")));
+                     y = Integer.parseInt(msg.getContentRaw().substring(msg.getContentRaw().indexOf(",") + 1, msg.getContentRaw().indexOf("}")));
+                }catch(Exception NumberFormatException){
+                    event.getChannel().sendMessage("format correctly please").queue();
+                }
+                if(x > 0 && y > 0 && x < 55 && y < 15){
+                    filler = new Filler(x, y);
+                } else{
+                    filler = new Filler();
+                }
+            }
+            else{
                 event.getChannel().sendMessage("learn to spell, just kidding, actually probably do").queue();
                 return;
             }
-            event.getChannel().sendMessage("" +filler).queue();
+            if(filler.isWon()){
+                int[] win = filler.winner();
+                event.getChannel().sendMessage(win[0] + " has won, player One: " + win[1] + " player Two: " + win[2]).queue();
+            }
+            if(filler.dimension() > 9){
+                for(String s: filler.bigToString()){
+                    event.getChannel().sendMessage(s).queue();
+                }
+            } else{
+                event.getChannel().sendMessage("" +filler).queue();
+            }
         }
     }
 }
